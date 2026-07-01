@@ -24,6 +24,12 @@ jobs:
         run: npm run lint
       - name: Build to check for errors
         run: npm run build
+      - name: Run Unit Tests
+        run: npm run test
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium
+      - name: Run E2E & Accessibility Tests
+        run: npm run e2e
 
   backend-lint-test:
     runs-on: ubuntu-latest

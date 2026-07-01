@@ -28,6 +28,8 @@ export function Navbar() {
                 <NavLink
                   key={item.to}
                   to={item.to}
+                  aria-label={item.label}
+                  title={item.label}
                   className={({ isActive }) =>
                     `flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                       isActive

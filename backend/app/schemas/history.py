@@ -2,11 +2,11 @@ from pydantic import BaseModel
 from datetime import datetime
 
 class TranslationSessionCreate(BaseModel):
-    text: str
+    full_transcript: str
 
 class TranslationSessionResponse(BaseModel):
     id: int
-    text: str
-    timestamp: datetime
+    full_transcript: str
+    started_at: datetime
 
     model_config = {"from_attributes": True}

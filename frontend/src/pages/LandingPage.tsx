@@ -41,7 +41,7 @@ export function LandingPage() {
             <div className="w-16 h-16 mx-auto bg-blue-100 dark:bg-blue-900/50 rounded-2xl flex items-center justify-center mb-6 text-blue-600 dark:text-blue-400">
               <Camera className="w-8 h-8" />
             </div>
-            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">No Extra Hardware</h3>
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-3">No Extra Hardware</h2>
             <p className="text-gray-500 dark:text-gray-400">
               Works directly in your browser using any standard webcam. No specialized gloves or cameras required.
             </p>
@@ -50,7 +50,7 @@ export function LandingPage() {
             <div className="w-16 h-16 mx-auto bg-indigo-100 dark:bg-indigo-900/50 rounded-2xl flex items-center justify-center mb-6 text-indigo-600 dark:text-indigo-400">
               <Zap className="w-8 h-8" />
             </div>
-            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">Lightning Fast</h3>
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-3">Lightning Fast</h2>
             <p className="text-gray-500 dark:text-gray-400">
               State-of-the-art WebSockets stream video frames for near-instantaneous translation feedback.
             </p>
@@ -59,7 +59,7 @@ export function LandingPage() {
             <div className="w-16 h-16 mx-auto bg-purple-100 dark:bg-purple-900/50 rounded-2xl flex items-center justify-center mb-6 text-purple-600 dark:text-purple-400">
               <Globe className="w-8 h-8" />
             </div>
-            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">Accessible Design</h3>
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-3">Accessible Design</h2>
             <p className="text-gray-500 dark:text-gray-400">
               Built with large text, high contrast, text-to-speech, and full keyboard navigation in mind.
             </p>

@@ -33,13 +33,13 @@ async def test_history_endpoints(client: AsyncClient):
     headers = {"Authorization": f"Bearer {token}"}
     
     # Create history
-    history_data = {"text": "HELLO WORLD"}
+    history_data = {"full_transcript": "HELLO WORLD"}
     response = await client.post("/api/history/", json=history_data, headers=headers)
     assert response.status_code == 200
-    assert response.json()["text"] == "HELLO WORLD"
+    assert response.json()["full_transcript"] == "HELLO WORLD"
     
     # Get history
     response = await client.get("/api/history/", headers=headers)
     assert response.status_code == 200
     assert len(response.json()) >= 1
-    assert response.json()[0]["text"] == "HELLO WORLD"
+    assert response.json()[0]["full_transcript"] == "HELLO WORLD"

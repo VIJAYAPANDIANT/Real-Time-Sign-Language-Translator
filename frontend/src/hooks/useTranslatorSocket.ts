@@ -1,22 +1,76 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import type { Prediction } from '../types';
 
+const WS_URL = import.meta.env.VITE_WS_URL || 'ws://localhost:8000/ws/translate';
 
 export function useTranslatorSocket() {
   const [isConnected, setIsConnected] = useState(false);
   const [predictions, setPredictions] = useState<Prediction[]>([]);
   const [isTranslating, setIsTranslating] = useState(false);
   const socketRef = useRef<WebSocket | null>(null);
-
+  const reconnectTimeoutRef = useRef<number | null>(null);
+  const retryCountRef = useRef(0);
 
   const connect = useCallback(() => {
     if (socketRef.current?.readyState === WebSocket.OPEN) return;
 
-    // wsUrl would be used here
-    setIsConnected(true);
+    try {
+      const ws = new WebSocket(WS_URL);
+
+      ws.onopen = () => {
+        setIsConnected(true);
+        retryCountRef.current = 0;
+      };
+
+      ws.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          if (data.type === 'prediction' && data.text) {
+            const predictionData: Prediction = {
+              text: data.text,
+              gloss: data.gloss,
+              confidence: data.confidence
+            };
+            setPredictions((prev) => {
+              const last = prev[prev.length - 1];
+              if (last && last.text === predictionData.text) {
+                 return prev;
+              }
+              return [...prev.slice(-10), predictionData];
+            });
+          }
+        } catch (e) {
+          console.error("Failed to parse websocket message", e);
+        }
+      };
+
+      ws.onclose = () => {
+        setIsConnected(false);
+        // Exponential backoff reconnect
+        if (retryCountRef.current < 5) {
+          const timeout = Math.min(1000 * Math.pow(2, retryCountRef.current), 10000);
+          reconnectTimeoutRef.current = window.setTimeout(() => {
+            retryCountRef.current += 1;
+            connect();
+          }, timeout);
+        }
+      };
+
+      ws.onerror = (error) => {
+        console.error('WebSocket Error:', error);
+        ws.close();
+      };
+
+      socketRef.current = ws;
+    } catch (e) {
+      console.error('Failed to create WebSocket', e);
+    }
   }, []);
 
   const disconnect = useCallback(() => {
+    if (reconnectTimeoutRef.current) {
+      clearTimeout(reconnectTimeoutRef.current);
+    }
     if (socketRef.current) {
       socketRef.current.close();
       socketRef.current = null;
@@ -37,34 +91,11 @@ export function useTranslatorSocket() {
     setPredictions([]);
   }, []);
 
-  // Mock incoming predictions while translating
   useEffect(() => {
-    let interval: ReturnType<typeof setInterval>;
-    if (isTranslating && isConnected) {
-      interval = setInterval(() => {
-        // Generate random mock prediction
-        const words = ['HELLO', 'THANK YOU', 'PLEASE', 'YES', 'NO', 'HELP'];
-        const word = words[Math.floor(Math.random() * words.length)];
-        const newPrediction: Prediction = {
-          text: word,
-          confidence: 0.8 + Math.random() * 0.19, // 0.8 to 0.99
-          gloss: word,
-        };
-        setPredictions(prev => {
-          // Keep last 10 predictions or just append
-          // To make it look like a stream, we can just update the last one or append new words
-          const last = prev[prev.length - 1];
-          if (last && last.text === word) {
-             return prev; // don't repeat same word immediately
-          }
-          return [...prev.slice(-10), newPrediction];
-        });
-      }, 2000);
-    }
     return () => {
-      if (interval) clearInterval(interval);
+      disconnect();
     };
-  }, [isTranslating, isConnected]);
+  }, [disconnect]);
 
   return {
     isConnected,
@@ -75,5 +106,6 @@ export function useTranslatorSocket() {
     startTranslating,
     stopTranslating,
     clearTranslations,
+    socket: socketRef.current,
   };
 }

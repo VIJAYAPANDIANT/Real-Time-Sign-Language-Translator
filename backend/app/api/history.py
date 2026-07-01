@@ -16,7 +16,7 @@ async def get_history(
     db: AsyncSession = Depends(get_db), 
     current_user: User = Depends(get_current_user)
 ):
-    query = select(TranslationSession).filter(TranslationSession.user_id == current_user.id).order_by(TranslationSession.timestamp.desc()).offset(skip).limit(limit)
+    query = select(TranslationSession).filter(TranslationSession.user_id == current_user.id).order_by(TranslationSession.started_at.desc()).offset(skip).limit(limit)
     result = await db.execute(query)
     sessions = result.scalars().all()
     return sessions
@@ -29,7 +29,7 @@ async def create_history(
 ):
     new_session = TranslationSession(
         user_id=current_user.id,
-        text=session_in.text
+        full_transcript=session_in.full_transcript
     )
     db.add(new_session)
     await db.commit()

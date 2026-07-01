@@ -15,3 +15,17 @@ def test_websocket_endpoint():
         # Since it's a dummy image, but we mocked extractor to return landmarks,
         # it will start buffering frames for the prediction window (size 10)
         assert data == {"type": "status", "state": "buffering"}
+
+def test_websocket_prediction_sequence():
+    with client.websocket_connect("/ws/translate") as websocket:
+        # Send 10 frames to fill the buffer and trigger a prediction
+        for i in range(10):
+            websocket.send_text(json.dumps({"frame": f"dummy_frame_{i}"}))
+            data = websocket.receive_json()
+            if i < 9:
+                assert data == {"type": "status", "state": "buffering"}
+            else:
+                # 10th frame triggers prediction
+                assert data["type"] == "prediction"
+                assert "text" in data
+                assert "confidence" in data
