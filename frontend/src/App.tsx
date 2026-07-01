@@ -16,9 +16,9 @@ function App() {
       <SettingsProvider>
         <ToastProvider>
           <Router>
-            <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors">
+            <div className="app-container">
               <Navbar />
-              <main>
+              <main className="main-content">
                 <Routes>
                   <Route path="/" element={<LandingPage />} />
                   <Route path="/translate" element={<TranslatorPage />} />

@@ -1,6 +1,6 @@
-
 import type { SessionHistory } from '../types';
 import { Clock, PlayCircle } from 'lucide-react';
+import './HistoryPage.css';
 
 export function HistoryPage() {
   // Mock history data since backend is not fully implemented
@@ -18,41 +18,36 @@ export function HistoryPage() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] bg-white dark:bg-gray-900 py-10 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">Translation History</h1>
-        
-        <div className="space-y-4">
-          {mockHistory.map((session) => (
-            <div 
-              key={session.id} 
-              className="bg-gray-50 dark:bg-gray-800 p-6 rounded-xl border border-gray-100 dark:border-gray-700 flex items-start justify-between group hover:shadow-md transition-shadow"
-            >
-              <div className="flex-1 mr-6">
-                <div className="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-2">
-                  <Clock className="w-4 h-4 mr-1" />
-                  {new Date(session.timestamp).toLocaleString()}
-                </div>
-                <p className="text-lg font-medium text-gray-900 dark:text-gray-100">
-                  {session.text}
-                </p>
+    <div className="container history-page animate-fade-in">
+      <h1 className="h2 text-gradient">Translation History</h1>
+      
+      <div className="history-list">
+        {mockHistory.map((session) => (
+          <div key={session.id} className="glass-panel history-card">
+            <div className="history-content">
+              <div className="history-time">
+                <Clock size={16} />
+                {new Date(session.timestamp).toLocaleString()}
               </div>
-              <button
-                onClick={() => handleReplay(session.text)}
-                className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 p-2 rounded-full hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors"
-                title="Replay Audio"
-              >
-                <PlayCircle className="w-8 h-8" />
-              </button>
+              <p className="history-text">
+                {session.text}
+              </p>
             </div>
-          ))}
-          
-          {mockHistory.length === 0 && (
-            <div className="text-center py-12 text-gray-500 dark:text-gray-400">
-              No translation history yet.
-            </div>
-          )}
-        </div>
+            <button
+              onClick={() => handleReplay(session.text)}
+              className="btn-replay"
+              title="Replay Audio"
+            >
+              <PlayCircle size={32} />
+            </button>
+          </div>
+        ))}
+        
+        {mockHistory.length === 0 && (
+          <div className="text-center text-secondary mt-4">
+            No translation history yet.
+          </div>
+        )}
       </div>
     </div>
   );

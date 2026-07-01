@@ -1,0 +1,111 @@
+.translation-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 400px;
+  padding: 2rem;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.panel-title {
+  margin: 0;
+}
+
+.panel-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.confidence-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border: 1px solid currentColor;
+}
+
+.confidence-high {
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.1);
+}
+
+.confidence-med {
+  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.1);
+}
+
+.confidence-low {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.btn-speak {
+  background: transparent;
+  color: var(--color-text-secondary);
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-speak:hover:not(:disabled) {
+  color: var(--color-primary-base);
+  background: var(--color-bg-secondary);
+  transform: scale(1.1);
+}
+
+.btn-speak:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.panel-content {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.status-message {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #334155; /* slate-700 for guaranteed contrast */
+  font-style: italic;
+}
+
+.translation-text {
+  font-size: 2.25rem;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--color-text-primary);
+}
+
+.text-placeholder {
+  color: var(--color-text-secondary);
+  opacity: 0.5;
+}
+
+.cursor-blink {
+  display: inline-block;
+  width: 0.5rem;
+  height: 2.5rem;
+  background-color: var(--color-primary-base);
+  animation: pulse-glow 1s infinite alternate;
+  vertical-align: middle;
+  margin-left: 0.25rem;
+}

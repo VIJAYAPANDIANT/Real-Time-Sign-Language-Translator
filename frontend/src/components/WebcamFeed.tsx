@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useWebcam } from '../hooks/useWebcam';
 import { VideoOff } from 'lucide-react';
+import './WebcamFeed.css';
 
 interface WebcamFeedProps {
   onVideoReady?: (videoRef: React.RefObject<HTMLVideoElement>) => void;
@@ -26,17 +27,17 @@ export function WebcamFeed({ onVideoReady, isActive }: WebcamFeedProps) {
   }, [onVideoReady, videoRef]);
 
   return (
-    <div className="relative w-full aspect-video bg-gray-900 rounded-xl overflow-hidden shadow-inner flex items-center justify-center">
+    <div className="webcam-container">
       {!stream && isActive && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-400">
-          <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+        <div className="webcam-overlay">
+          <div className="spinner"></div>
           <p>Accessing camera...</p>
         </div>
       )}
       
       {!isActive && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-500 bg-gray-800">
-          <VideoOff className="w-12 h-12 mb-2 opacity-50" />
+        <div className="webcam-overlay">
+          <VideoOff size={48} style={{ marginBottom: '1rem', opacity: 0.5 }} />
           <p>Camera is off</p>
         </div>
       )}
@@ -46,7 +47,7 @@ export function WebcamFeed({ onVideoReady, isActive }: WebcamFeedProps) {
         autoPlay
         playsInline
         muted
-        className={`w-full h-full object-cover transform -scale-x-100 ${(!stream || !isActive) ? 'hidden' : 'block'}`}
+        className={`webcam-video ${(!stream || !isActive) ? 'hidden' : ''}`}
       />
     </div>
   );
